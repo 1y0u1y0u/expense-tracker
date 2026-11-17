@@ -1,183 +1,74 @@
 
-import csv
-from datetime import date, datetime
-from decimal import Decimal, InvalidOperation
-from pathlib import Path
-
-
 # ==========================================
-# 1. Basic Settings
+# Expense Tracker - Input Module
+# Commit 1: Create Expense Input Structure
 # ==========================================
 
-# CSV file will be saved in the same folder as input.py
-DATA_FILE = Path(__file__).resolve().parent / "expenses.csv"
 
-# Standard CSV column names
-FIELDNAMES = ["date", "amount", "category", "notes"]
-
-
-# ==========================================
-# 2. Input Date
-# ==========================================
-
+# 1. Input Expense Date
 def input_date():
-    today = date.today().isoformat()
-
-    while True:
-        raw_date = input(
-            f"Date (YYYY-MM-DD, Enter for today {today}): "
-        ).strip()
-
-        if not raw_date:
-            return today
-
-        try:
-            parsed_date = datetime.strptime(
-                raw_date, "%Y-%m-%d"
-            ).date()
-
-            return parsed_date.isoformat()
-
-        except ValueError:
-            print("Invalid date! Please use YYYY-MM-DD.")
+    expense_date = input("Enter date (YYYY-MM-DD): ").strip()
+    return expense_date
 
 
-# ==========================================
-# 3. Input Amount
-# ==========================================
-
+# 2. Input Expense Amount
 def input_amount():
-    while True:
-        raw_amount = input("Amount: ").strip()
-
-        try:
-            amount = Decimal(raw_amount)
-
-            if amount.is_finite() and amount > 0:
-                return format(amount, "f")
-
-            print("Amount must be greater than zero.")
-
-        except InvalidOperation:
-            print("Invalid amount! Please enter a number.")
+    amount = input("Enter amount: ").strip()
+    return amount
 
 
-# ==========================================
-# 4. Input Category
-# ==========================================
-
+# 3. Input Expense Category
 def input_category():
-    while True:
-        category = input("Category: ").strip()
-
-        if category:
-            return category
-
-        print("Category cannot be empty.")
+    category = input("Enter category: ").strip()
+    return category
 
 
-# ==========================================
-# 5. Input Notes
-# ==========================================
-
+# 4. Input Optional Notes
 def input_notes():
-    return input("Notes (optional): ").strip()
+    notes = input("Enter notes (optional): ").strip()
+    return notes
 
 
-# ==========================================
-# 6. Save Expense to CSV
-# ==========================================
+# 5. Collect All Expense Information
+def collect_expense():
 
-def save_expense(expense):
+    expense = {
+        "date": input_date(),
+        "amount": input_amount(),
+        "category": input_category(),
+        "notes": input_notes()
+    }
 
-    file_exists = (
-        DATA_FILE.exists()
-        and DATA_FILE.stat().st_size > 0
-    )
-
-    with DATA_FILE.open(
-        "a",
-        newline="",
-        encoding="utf-8"
-    ) as file:
-
-        writer = csv.DictWriter(
-            file,
-            fieldnames=FIELDNAMES
-        )
-
-        # Write header only when creating a new file
-        if not file_exists:
-            writer.writeheader()
-
-        writer.writerow(expense)
+    return expense
 
 
-# ==========================================
-# 7. Ask Whether to Continue
-# ==========================================
+# 6. Display Expense Information
+def display_expense(expense):
 
-def ask_continue():
+    print("\n" + "=" * 40)
+    print("       EXPENSE INFORMATION")
+    print("=" * 40)
 
-    while True:
-        choice = input(
-            "Add another expense? (y/n): "
-        ).strip().lower()
+    print(f"Date     : {expense['date']}")
+    print(f"Amount   : {expense['amount']}")
+    print(f"Category : {expense['category']}")
+    print(f"Notes    : {expense['notes']}")
 
-        if choice in ["y", "yes", "是"]:
-            return True
-
-        elif choice in ["n", "no", "否"]:
-            return False
-
-        print("Please enter y or n.")
+    print("=" * 40)
 
 
-# ==========================================
-# 8. Main Program
-# ==========================================
-
+# 7. Main Program
 def main():
 
     print("=" * 40)
-    print("       EXPENSE TRACKER")
+    print("          EXPENSE TRACKER")
     print("=" * 40)
 
-    saved_count = 0
+    expense = collect_expense()
 
-    while True:
-
-        print("\nPlease enter expense information.")
-
-        expense = {
-            "date": input_date(),
-            "amount": input_amount(),
-            "category": input_category(),
-            "notes": input_notes()
-        }
-
-        try:
-            save_expense(expense)
-
-            saved_count += 1
-
-            print("\nExpense saved successfully!")
-            print(f"Date: {expense['date']}")
-            print(f"Amount: {expense['amount']}")
-            print(f"Category: {expense['category']}")
-
-        except OSError as error:
-            print(f"Unable to save expense: {error}")
-            break
-
-        if not ask_continue():
-            break
-
-    print("\n" + "=" * 40)
-    print(f"Total expenses added: {saved_count}")
-    print(f"Data saved to: {DATA_FILE}")
-    print("=" * 40)
+    display_expense(expense)
 
 
+# Program Entry Point
 if __name__ == "__main__":
     main()
