@@ -1,4 +1,6 @@
 # 第三條分支，應該在test-merge看到他
+以feature-input作為根結點出來的分支，把feature-piechart合併了進來
+
 # Expense Tracker
 
 A simple expense-tracking application developed in Python for the Introduction to Software Engineering course.
