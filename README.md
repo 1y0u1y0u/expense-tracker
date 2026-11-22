@@ -1,145 +1,108 @@
-# 第三條分支，應該在test-merge看到他
-以feature-input作為根結點出來的分支，把feature-piechart合併了進來
+# Expense Tracker 💳
 
-# Expense Tracker
+**Introduction to Software Engineering — Assignment 1: Version Control Practice**
 
-A simple expense-tracking application developed in Python for the Introduction to Software Engineering course.
+A two-person Python project that records expenses in CSV format and visualizes spending with a category-based pie chart. Developed collaboratively using Git feature branches and merge commits.
 
-This project allows users to record daily expenses, store expense data in CSV format, and visualize spending distributions through category-based pie charts.
+## ✨ Features
 
-## Features
+| Member A — Input Module | Member B — Visualization Module |
+|---|---|
+| Add multiple expense entries | Read saved CSV expense records |
+| Validate dates, positive amounts, and categories | Group and total expenses by category |
+| Optional notes and persistent CSV storage | Generate a styled pie/donut chart with percentages |
+| Colorful terminal menu, recent history, and summary | Save a PNG report automatically |
 
-### 1. Expense Input (Member A)
-
-- Add multiple expense records.
-- Enter expense date, amount, and category.
-- Add optional notes.
-- Validate date format and expense amount.
-- Prevent empty categories.
-- Automatically save records to a CSV file.
-- Preserve previously recorded expenses.
-
-### 2. Expense Visualization (Member B)
-
-- Load expense records from CSV.
-- Group expenses by category.
-- Calculate total spending for each category.
-- Generate a category-based pie chart.
-
-## Project Structure
+## 📁 Project Structure
 
 ```text
 expense-tracker/
-│
-├── input.py          # Expense input and CSV storage
-├── visualize.py      # Expense visualization (Member B)
-├── expenses.csv      # Generated expense data
-├── README.md         # Project documentation
-└── .gitignore        # Git ignore configuration
+├── input.py                   # Input module and terminal menu (Member A)
+├── visualization.py           # Visualization module (Member B)
+├── requirements.txt           # Python dependency list
+├── images/
+│   └── sample_pie_chart.png   # Generated sample chart
+├── README.md
+├── .gitignore
+└── expenses.csv               # Created locally; not committed to Git
 ```
 
-Note: expenses.csv is generated automatically when the input module is executed. It is excluded from Git tracking.
+**Data columns:** `date,amount,category,notes` (UTF-8 CSV)
 
-## Requirements
+## ⚙️ Setup
 
-- Python 3.7 or later
-- Matplotlib (for pie chart visualization)
+Requirements: **Python 3.10 or later** and a terminal (VS Code terminal recommended).
 
-The input module uses only Python standard libraries.
-
-Install the visualization dependency:
-
-```bash
-python -m pip install matplotlib
-```
-
-## Installation
-
-Clone the repository:
-
-```bash
+```powershell
 git clone https://github.com/1y0u1y0u/expense-tracker.git
-```
-
-Navigate to the project directory:
-
-```bash
 cd expense-tracker
+git switch test-merge
+python -m pip install -r requirements.txt
 ```
 
-## How to Run
+> The integration work is maintained on `test-merge`. After the final version is merged into the default `main` branch, `git switch test-merge` is optional.
 
-### 1. Run the Input Module
+## ▶️ How to Run
 
-Execute:
+### Step 1: Record expenses
 
-```bash
+```powershell
 python input.py
 ```
 
-Enter the following information:
+Choose an option in the terminal:
 
-- Date (YYYY-MM-DD)
-- Amount
-- Category
-- Notes (optional)
+- `1` — Add expense (date, positive amount, category, optional notes)
+- `2` — View up to eight recent entries
+- `3` — View total spending by category
+- `0` — Exit
 
-The program validates the input and saves expense records to `expenses.csv`.
+After each entry, type `y` to add another or `n` to return to the menu. Press Enter at the date prompt to use today's date.
 
-Users can continue adding expenses by entering `y` or finish by entering `n`.
+Expenses are saved to **`expenses.csv`** in the same folder as `input.py`. The file is not overwritten when additional expenses are entered.
 
-### 2. Run the Visualization Module
+### Step 2: Display the pie chart
 
-After adding expense records, execute:
-
-```bash
-python visualize.py
+```powershell
+python visualization.py
 ```
 
-The visualization module reads `expenses.csv` and generates a pie chart showing the distribution of total expenses by category.
+The script reads **`expenses.csv`**, totals positive amounts by category, displays the pie chart, and saves a screenshot-ready PNG to **`images/sample_pie_chart.png`**.
 
-Note: The visualization module is developed by Member B.
+### Example data
 
-## CSV Data Format
+| date | amount | category | notes |
+|---|---:|---|---|
+| 2026-11-22 | 200 | Food | Lunch |
+| 2026-11-22 | 100 | Transport | Bus |
+| 2026-11-22 | 300 | Food | Dinner |
+| 2026-11-22 | 400 | Entertainment | Movie |
 
-All expense records are stored using the following columns:
+Expected totals: **Food 500 (50%)**, **Transport 100 (10%)**, **Entertainment 400 (40%)**.
 
-| Column | Description |
-|---|---|
-| date | Expense date (YYYY-MM-DD) |
-| amount | Expense amount |
-| category | Expense category |
-| notes | Optional description |
+## 📊 Sample Pie Chart
 
-Example:
+![Sample pie chart showing category spending percentages](images/sample_pie_chart.png)
 
-```csv
-date,amount,category,notes
-2026-11-17,120,Food,Lunch
-2026-11-17,35,Transport,Bus
-2026-11-18,500,Education,Books
-```
+The sample chart is generated by `visualization.py` using the example expenses above. Running the visualization again overwrites the PNG with a chart based on your current local CSV.
 
-## Sample Pie Chart
+## 🛠️ Troubleshooting
 
-The following section will contain a screenshot of the generated category-based pie chart.
+- **`No expenses.csv found`** — Run `python input.py` and add at least one expense.
+- **`No module named matplotlib`** — Run `python -m pip install -r requirements.txt`.
+- **Chinese labels appear as boxes** — Use English categories, or install a Chinese-capable font such as Microsoft JhengHei or Noto Sans CJK and rerun.
+- **Wrong visualization filename** — Use `visualization.py` (not `visualize.py`).
 
-<!-- Add the screenshot at images/sample_pie_chart.png after integrating the visualization module. -->
+## 🌿 Git Collaboration
 
-## Team Collaboration
+- **Member A:** `feature-input` — expense input and CSV storage
+- **Member B:** `feature-piechart` — category-based visualization
+- **Integration:** `test-merge` — brings both modules together
+- **Polish:** `feature-ui-polish` — interface, chart, and documentation improvements
 
-This project is developed collaboratively using Git and GitHub.
+The project retains separate branches, contributor history, and merge commits so the GitHub **Insights → Network** graph shows collaboration.
 
-- Member A: Expense input module and CSV data storage.
-- Member B: Expense visualization and pie chart generation.
+## 🎥 Demonstration
 
-Both members work on separate feature branches, which are integrated through Git merging.
+The demo video shows how to add several expenses, check the CSV data, display the generated chart, and inspect the Git branch/merge history.
 
-## Course Information
-
-Course: Introduction to Software Engineering
-
-Assignment 1: Version Control Practice
-# expense-tracker
-
-#畫圓餅圖分支，如果不在feature-piechart ，我應該要緊張了。
